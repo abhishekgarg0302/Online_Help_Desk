@@ -1,0 +1,107 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="CSS/index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body id="bo">
+	<a href="index.php" class="logo"><img src="IMAGES/logo.png" width="110px" height="110px"></a>
+	<div class="dropdown" style="float:right;" id="accbtn">
+		<button class="btn btn1 dropbtn1">User Login</button>
+		<div class="dropdown-content">
+			<a href="index.php">Student Login</a>
+			<a href="Faculty Head Login.php">Faculty Head Login</a>
+		</div>
+	</div>
+	<form method="POST" id="login-form" class="login-form">
+		<h1 class="ha1">College Head Login</h1>
+		<div class="txtb">
+			<input type="text" placeholder="Unique ID" id="cid" name="cid" required>
+		</div>
+		<div class="txtb">
+			<input type="email" placeholder="Email" id="email" name="email" required>
+		</div>
+		<div class="txtb">
+			<input type="password" placeholder="Password" id="password" name="password" required>
+		</div>
+		<input type="submit" class="logbtn" value="Login" name="submit">
+		<div class="bottom-text">
+			<a href="Forgot password page.php">Forgot the Password</a>
+		</div>
+	</form>
+	<script>
+		$('#login-form').submit(function (e) {
+			e.preventDefault()
+			$('#login-form button[type="submit"]').attr('disabled', true).html('Logging in...');
+			var cid = $('#cid').val().trim();
+			$('#cid').val(cid);
+			var email = $('#email').val().trim();
+			$('#email').val(email);
+			var password = $('#password').val().trim();
+			$('#password').val(password);
+			if (cid === '' || email === '' || password === '') {
+				alert('Please fill in all the required fields.');
+				return;
+			}
+			var cidRegex = /^[A-Za-z]\d{6}$/;
+			if (!cidRegex.test(cid)) {
+				alert('Please enter a valid College Head ID (e.g., A123456).');
+				return;
+			}
+			var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!emailRegex.test(email)) {
+				alert('Please enter a valid email address.');
+				return;
+			}
+			$.ajax({
+				url: 'admin/ajax.php?action=CollegeHeadLogin',
+				method: 'POST',
+				data: $(this).serialize(),
+				error: err => {
+					console.log(err)
+					$('#login-form button[type="submit"]').removeAttr('disabled').html('Login');
+				},
+				success: function (resp) {
+					if (resp == 1) {
+						location.href = 'PHP/CollegeHead/';
+					} else if (resp == 2) {
+						alert("You are not authorized");
+						$('#login-form button[type="submit"]').removeAttr('disabled').html('Login');
+					} else if (resp == 3) {
+						alert("Invalid Credentials");
+						$('#login-form button[type="submit"]').removeAttr('disabled').html('Login');
+					} else if (resp == 4) {
+						alert("User is not approveed yet. Please wait for approval.");
+						$('#login-form button[type="submit"]').removeAttr('disabled').html('Login');
+					} else {
+						alert("Unknown Error");
+						$('#login-form button[type="submit"]').removeAttr('disabled').html('Login');
+					}
+				}
+			})
+		})
+	</script>
+	<div id="page"></div>
+	<div class="footer">
+		<div class="footer-content">
+
+			<div class="footer-section about">
+				<h1 id="text">About Website</h1>
+				<p id="text">This site represents an online helpdesk for SKIT students.<br>It allows
+					students to raise their queries and let faculty members guide them. </p>
+			</div>
+			<div class="footer-section links"></div>
+			<div id="footerimgW">
+				<a href="https://web.whatsapp.com/"><img src="IMAGES/whatapp.jpg" width="30px" height="30px"></a>
+				<a href="https://www.youtube.com/"><img src="IMAGES/youtube.png" width="30px" height="30px"></a>
+				<a href="https://www.facebook.com/"><img src="IMAGES/facebook.png" width="30px" height="30px"></a>
+			</div>
+		</div>
+		<div class="footer-bottom" id="text">
+			&copy;Techies
+		</div>
+	</div>
+</body>
+
+</html>

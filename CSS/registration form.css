@@ -1,0 +1,17 @@
+#user_msg {
+    /* width:100%; */
+    display: None;
+    text-align: center !important;
+    size: medium;
+}
+
+.err-msg {
+    /* display: block; */
+    display: none;
+    color: red;
+    text-align: center;
+    width: 100%;
+    padding: 0;
+    margin-top: -20px;
+    margin-bottom: -20px;
+}

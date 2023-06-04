@@ -1,0 +1,170 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="CSS/College Head.css">
+    <link rel="stylesheet" href="CSS/registration form.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body id="bo">
+    <a href="index.php" class="logo"><img src="IMAGES/logo.png" width="110px" height="110px"></a>
+    <div class="dropdown" style="float:right;" id="accbtn">
+        <button class="btn btn1 dropbtn1">User Login</button>
+        <div class="dropdown-content">
+            <a href="index.php">Student Login</a>
+            <a href="College Head Login.php">College Head Login</a>
+            <a href="Faculty Head Login.php">Faculty Head Login</a>
+        </div>
+    </div>
+    <form method="POST" class="signup-form login-form" id="signup-form">
+        <h1 class="ha1">Sign Up</h1>
+        <!-- <p id="user_msg">User has been registered. <a href="index.php">Click Here</a> to login.</p> -->
+        <div class="txtb">
+            <input type="text" placeholder="Enter Your First Name" id="firstname" name="firstname" required>
+        </div>
+        <div class="txtb">
+            <input type="text" placeholder="Enter your Last Name" id="lastname" name="lastname" required>
+        </div>
+        <!-- <p class=err-msg id=error-username></p> -->
+        <div class="txtb">
+            <input type="email" placeholder="Enter your Email" id="email" name="email" required>
+        </div>
+        <!-- <p class=err-msg id=error-email></p> -->
+        <div class="txtb">
+            <input type="text" placeholder="Enter your College ID" id="cid" name="cid" required>
+        </div>
+        <!-- <p class=err-msg id=error-collegeID></p> -->
+        <div class="txtb">
+            <input type="password" placeholder="Enter your Password" id="pass" name="password" required>
+        </div>
+        <div class="txtb">
+            <input type="password" placeholder="Re-Enter your Password" id="rpass" name="re-password" required>
+        </div>
+        <p class=err-msg id=error-password></p>
+        <div class="select txtb">
+            <select id="selester" name="semester" class="unicourse" required>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
+                <option value=6>6</option>
+                <option value=7>7</option>
+                <option value=8>8</option>
+            </select>
+        </div>
+        <div class="select txtb">
+            <select id="course" name="course" class="unicourse" required>
+                <option value=1 selected>Computer Science and Engineering</option>
+                <option value=2>Information Technology</option>
+                <option value=3>Electrical Engineering</option>
+                <option value=4>Electronics and Communication Engineering</option>
+                <option value=5>Mechanical Engineering</option>
+                <option value=6>Civil Engineering</option>
+            </select>
+        </div>
+        <input type="submit" class="logbtn" value="Create Account" name="submit">
+        <div class="bottom-text">
+            <a href="index.php">Already Have one ?</a>
+        </div>
+    </form>
+    <script>
+        $(document).ready(function () {
+            // Form validation
+            $('#signup-form').submit(function (e) {
+                e.preventDefault();
+
+                // Validate form fields
+                var firstname = $('#firstname').val().trim();
+                var lastname = $('#lastname').val().trim();
+                var email = $('#email').val().trim();
+                var cid = $('#cid').val().trim();
+                var password = $('#pass').val().trim();
+                var rpassword = $('#rpass').val().trim();
+                var course = $('#course').val();
+
+                // Regular expressions
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                var cidRegex = /^[A-Za-z]\d{6}$/;
+
+                // Perform individual field validations
+                if (firstname === '' || lastname === '' || email === '' || cid === '' || password === '' || rpassword === '') {
+                    alert('Please fill in all the required fields.');
+                    return;
+                }
+
+                // Validate first name and last name
+                if (/\d/.test(firstname) || /\d/.test(lastname)) {
+                    alert('First name and last name should not contain numbers.');
+                    return;
+                }
+
+                // Validate email
+                if (!emailRegex.test(email)) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+
+                // Validate CID
+                if (!cidRegex.test(cid)) {
+                    alert('Please enter a valid College ID (e.g., A123456).');
+                    return;
+                }
+
+                // Perform password match validation
+                if (password !== rpassword) {
+                    alert('Passwords do not match.');
+                    return;
+                }
+
+                // Perform AJAX call
+                $.ajax({
+                    url: 'admin/ajax.php?action=SignUp', // Replace with the URL of your backend script
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    error: function (err) {
+                        console.log(err);
+                        alert('Error occurred. Please try again.');
+                    },
+                    success: function (resp) {
+                        if (resp === '1') {
+                            alert('User registered successfully. Please login.');
+                            $('#signup-form')[0].reset();
+                            location.href = 'index.php';
+                        } else if (resp === '2') {
+                            alert('User with the same email already exists.');
+                        } else if (resp === '3') {
+                            alert('User with the same CID already exists.');
+                        } else if (resp === '4') {
+                            alert('Error occurred while registering user. Please try again.');
+                        } else {
+                            alert('Unknown response from server.'.resp);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- </div> -->
+    <div id="page"></div>
+    <div class="footer">
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h1 id="text">About Website</h1>
+                <p id="text">This site represents an online helpdesk for SKIT students.<br>It allows
+                    students to raise their queries and let faculty members guide them. </p>
+            </div>
+            <div class="footer-section links"></div>
+            <div id="footerimgW">
+                <a href="https://web.whatsapp.com/"><img src="IMAGES/whatapp.jpg" width="30px" height="30px"></a>
+                <a href="https://www.youtube.com/"><img src="IMAGES/youtube.png" width="30px" height="30px"></a>
+                <a href="https://www.facebook.com/"><img src="IMAGES/facebook.png" width="30px" height="30px"></a>
+            </div>
+        </div>
+        <div class="footer-bottom" id="text">
+            &copy;Techies
+        </div>
+    </div>
+</body>
+
+</html>
